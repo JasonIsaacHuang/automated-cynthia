@@ -44,10 +44,12 @@ class RateCity(Scraper):
         except Exception as e:
             raise Exception('Parsing error in' + url)
 
+        num_products = len(products_urls)
         # Go to each individual page and fetch the data there
         for idx, product in enumerate(products_urls):
-            print("[" + str(idx+1) + "/" + str(len(products_urls)) + "] Fetching " + product)
-            product = self.product(self.base_url + product)
+            url = self.base_url + product
+            print("[" + str(idx+1).zfill(len(str(num_products))) + "/" + str(num_products) + "] Fetching " + url)
+            product = self.product(url)
             products_list.append(product)
 
         return products_list
