@@ -20,9 +20,9 @@ class RateCity(Scraper):
                 try:
                     lender_list.append(lender.parent.parent.attrs['href'])
                 except Exception as e:
-                    raise e
+                    pass
         except Exception as e:
-            raise e
+            raise Exception('Parsing error in' + url)
 
         return lender_list
 
@@ -32,78 +32,138 @@ class RateCity(Scraper):
         souped_response = BeautifulSoup(response.content, "html.parser")
 
         products_list = []
+        products_urls = []
+
         try:
+            # Collect a list of product urls first
             result_set = souped_response.find(class_='hidden-xs-ratetable').find('tbody')
-            products_urls = []
+
             for product in result_set.find_all('tr'):
                 products_urls.append(product.find('td', class_='attribute company clickable-link').find('div').find('a').attrs['href'])
 
-            for idx, product in enumerate(products_urls):
-                print("[" + str(idx+1) + "/" + str(len(products_urls)) + "] Fetching " + product)
-                products_list.append(self.product(self.base_url + product))
         except Exception as e:
-            print("Could not fetch html for product list")
-            raise e
+            raise Exception('Parsing error in' + url)
+
+        # Go to each individual page and fetch the data there
+        for idx, product in enumerate(products_urls):
+            print("[" + str(idx+1) + "/" + str(len(products_urls)) + "] Fetching " + product)
+            product = self.product(self.base_url + product)
+            products_list.append(product)
 
         return products_list
 
     def product(self, url):
         object = {}
+    
+        response = requests.get(url + '?h_flexibilityScore=30') # need the suffix for some pages to load properly
+        souped_response = BeautifulSoup(response.content, "html.parser")
         try:
-            response = requests.get(url + '?h_flexibilityScore=30') # need the suffix for some pages to load properly
-            souped_response = BeautifulSoup(response.content, "html.parser")
-            
             object['Name'] = souped_response.find('h1', property='name').find('div').text
+        except Exception as e:
+            # Name is required or else this product would be useless
+            return {}
 
+        try:
             object['Lender'] = souped_response.find('ol', class_='breadcrumb').find('a', href=re.compile('/home-loans/.+')).find('span', property='name').text
+        except Exception as e:
+            # Lender is required or else this product would be useless
+            return {}
 
+        try:
             object['Advertised rate'] = souped_response.find(text='Advertised rate').parent.parent.find(class_='cell-value').text
+        except Exception as e:
+            object['Advertised rate'] = 'N/A'
 
+        try:
             object['Comparison rate'] = souped_response.find(text='Comparison rate*').parent.parent.find(class_='cell-value').text
+        except Exception as e:
+            object['Comparison rate'] = 'N/A'
 
+        try:
             detail_fees = souped_response.find('h4', text='Details & Fees').parent
 
-            object['LVR'] = detail_fees.find('th', class_='maxLvr attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            try:
+                object['LVR'] = detail_fees.find('th', class_='maxLvr attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            except Exception as e:
+                object['LVR'] = 'N/A'
 
-            object['Rate Type'] = detail_fees.find('th', class_='rateType attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            try:
+                object['Rate Type'] = detail_fees.find('th', class_='rateType attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            except Exception as e:
+                object['Rate Type'] = 'N/A'
 
-            object['Borrowing range'] = detail_fees.find('th', class_='borrowingRange attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            try:
+                object['Borrowing range'] = detail_fees.find('th', class_='borrowingRange attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            except Exception as e:
+                object['Borrowing range'] = 'N/A'
 
-            if detail_fees.find('th', class_='principalAndInterest attribute').parent.find('td').find('div').find('span', class_='fa fa-check'):
-                object['Principal & Interest'] = True
-            elif detail_fees.find('th', class_='principalAndInterest attribute').parent.find('td').find('div').find('span', class_='fa fa-minus'):
-                object['Principal & Interest'] = False
+            try:
+                if detail_fees.find('th', class_='principalAndInterest attribute').parent.find('td').find('div').find('span', class_='fa fa-check'):
+                    object['Principal & Interest'] = True
+                elif detail_fees.find('th', class_='principalAndInterest attribute').parent.find('td').find('div').find('span', class_='fa fa-minus'):
+                    object['Principal & Interest'] = False
+            except Exception as e:
+                pass
+            
+            try:
+                if detail_fees.find('th', class_='interestOnly attribute').parent.find('td').find('div').find('span', class_='fa fa-check'):
+                    object['Interest Only'] = True
+                elif detail_fees.find('th', class_='interestOnly attribute').parent.find('td').find('div').find('span', class_='fa fa-minus'):
+                    object['Interest Only'] = False
+            except Exception as e:
+                pass
 
-            if detail_fees.find('th', class_='interestOnly attribute').parent.find('td').find('div').find('span', class_='fa fa-check'):
-                object['Interest Only'] = True
-            elif detail_fees.find('th', class_='interestOnly attribute').parent.find('td').find('div').find('span', class_='fa fa-minus'):
-                object['Interest Only'] = False
+            try:
+                object['Loan Term'] = detail_fees.find('th', class_='loanTerm attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            except Exception as e:
+                object['Loan Term'] = 'N/A'
 
-            object['Loan Term'] = detail_fees.find('th', class_='loanTerm attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            try:
+                if detail_fees.find('th', class_='offsetAccount attribute').parent.find('td').find('div').find('span', class_='fa fa-minus'):
+                    object['Offset Account'] = "None"
+                elif detail_fees.find('th', class_='offsetAccount attribute').parent.find('td').find('div').find('span', class_='fa fa-check'):
+                    object['Offset Account'] = detail_fees.find('th', class_='offsetAccount attribute').parent.find('td').find('div').find('span', class_='cell-details').text
+            except Exception as e:
+                pass
 
-            if detail_fees.find('th', class_='offsetAccount attribute').parent.find('td').find('div').find('span', class_='fa fa-minus'):
-                object['Offset Account'] = "None"
-            elif detail_fees.find('th', class_='offsetAccount attribute').parent.find('td').find('div').find('span', class_='fa fa-check'):
-                object['Offset Account'] = detail_fees.find('th', class_='offsetAccount attribute').parent.find('td').find('div').find('span', class_='cell-details').text
+            try:
+                object['Extra Repayments'] = detail_fees.find('th', class_='extraRepayments attribute').parent.find('td').find('div').find('span', class_='cell-details').text
+            except Exception as e:
+                object['Extra Repayments'] = 'N/A'
 
-            object['Extra Repayments'] = detail_fees.find('th', class_='extraRepayments attribute').parent.find('td').find('div').find('span', class_='cell-details').text
+            try:
+                if detail_fees.find('th', class_='redrawFacility attribute').parent.find('td').find('div').find('span', class_='fa fa-minus'):
+                    object['Redraw Facility'] = "None"
+                elif detail_fees.find('th', class_='redrawFacility attribute').parent.find('td').find('div').find('span', class_='fa fa-check'):
+                    object['Redraw Facility'] = detail_fees.find('th', class_='redrawFacility attribute').parent.find('td').find('div').find('span', class_='cell-details').text
+            except Exception as e:
+                pass
 
-            if detail_fees.find('th', class_='redrawFacility attribute').parent.find('td').find('div').find('span', class_='fa fa-minus'):
-                object['Redraw Facility'] = "None"
-            elif detail_fees.find('th', class_='redrawFacility attribute').parent.find('td').find('div').find('span', class_='fa fa-check'):
-                object['Redraw Facility'] = detail_fees.find('th', class_='redrawFacility attribute').parent.find('td').find('div').find('span', class_='cell-details').text
+            try:
+                if detail_fees.find('th', class_='splitLoan attribute').parent.find('td').find('div').find('span', class_='fa fa-check'):
+                    object['Split Loan'] = True
+                elif detail_fees.find('th', class_='splitLoan attribute').parent.find('td').find('div').find('span', class_='fa fa-minus'):
+                    object['Split Loan'] = False
+            except Exception as e:
+                pass
 
-            if detail_fees.find('th', class_='splitLoan attribute').parent.find('td').find('div').find('span', class_='fa fa-check'):
-                object['Split Loan'] = True
-            elif detail_fees.find('th', class_='splitLoan attribute').parent.find('td').find('div').find('span', class_='fa fa-minus'):
-                object['Split Loan'] = False
+            try:
+                object['Loan Purpose'] = detail_fees.find('th', class_='suitableFor attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            except Exception as e:
+                object['Loan Purpose'] = 'N/A'
 
-            object['Loan Purpose'] = detail_fees.find('th', class_='suitableFor attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            try:
+                object['States'] = detail_fees.find('th', class_='applicableStates attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            except Exception as e:
+                object['States'] = 'N/A'
 
-            object['States'] = detail_fees.find('th', class_='applicableStates attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            try:
+                object['Repayment Frequency'] = detail_fees.find('th', class_='repaymentFrequencyOptions attribute').parent.find('td').find('div').find('span', class_='cell-value').text
+            except Exception as e:
+                object['Repayment Frequency'] = 'N/A'
 
-            object['Repayment Frequency'] = detail_fees.find('th', class_='repaymentFrequencyOptions attribute').parent.find('td').find('div').find('span', class_='cell-value').text
         except Exception as e:
-            print("Error in " + url)
+            # If it fails here, return what we have so that we at least know this product exists,
+            pass
 
         return object

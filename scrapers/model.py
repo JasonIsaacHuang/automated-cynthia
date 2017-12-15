@@ -25,7 +25,7 @@ class Scraper(ABC):
 		pass
 	
 	def products(self, force_fetch=False):
-
+		print("Retrieving products from " + self.base_url)
 		if self.product_list == [] or force_fetch:
 			product_list = self._products()
 
@@ -46,9 +46,10 @@ class Scraper(ABC):
 
 		file_handle = open(file_name,'w')
 
-		keys = products[0].keys()
+		keys = set().union(*products)
 
 		csv_writer = csv.DictWriter(file_handle,keys)
+		print("Writing to " + file_name)
 		csv_writer.writeheader()
 		csv_writer.writerows(products)
 
