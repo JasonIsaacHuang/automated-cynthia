@@ -2,7 +2,8 @@ from bs4 import BeautifulSoup
 import csv
 import re
 import requests
-from scrapers import ratecity
+import sys
+from scrapers.ratecity import RateCity
 
 def write_products_to_csv(dict_list):
     keys = dict_list[0].keys()
@@ -13,8 +14,8 @@ def write_products_to_csv(dict_list):
     f.close()
 
 def main(argv):
-    products = ratecity.get_list_of_all_products()
-    write_products_to_csv(products)
+    ratecity = RateCity()
+    write_products_to_csv(ratecity.products())
 
 if __name__ == "__main__":
     main(sys.argv)
