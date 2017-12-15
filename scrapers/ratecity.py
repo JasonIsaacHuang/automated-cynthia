@@ -8,7 +8,7 @@ class RateCity(Scraper):
 
     base_url = 'http://www.ratecity.com.au'
 
-    def lenders(self):
+    def _lenders(self):
         url = self.base_url + '/home-loans/companies'
         response = requests.get(url)
         souped_response = BeautifulSoup(response.content, "html.parser")
