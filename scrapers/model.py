@@ -12,7 +12,7 @@ class Scraper(ABC):
 
 	def lenders(self, force_fetch=False):
 
-		if self.lender_list == [] or force_fetch == True:
+		if self.lender_list == [] or force_fetch:
 			lender_list = self._lenders()
 
 			if not lender_list == [] and not lender_list == None:
@@ -24,8 +24,18 @@ class Scraper(ABC):
 	def _lenders(self):
 		pass
 	
+	def products(self, force_fetch=False):
+
+		if self.product_list == [] or force_fetch:
+			product_list = self._products()
+
+			if not product_list == [] and not product_list == None:
+				self.product_list = product_list
+
+		return self.product_list
+
 	@abstractmethod
-	def products(self):
+	def _products(self):
 		pass
 	
 	def to_csv(self, products, file_name):

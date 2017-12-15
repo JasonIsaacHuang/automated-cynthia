@@ -26,7 +26,7 @@ class RateCity(Scraper):
 
         return lender_list
 
-    def products(self):
+    def _products(self):
         url = self.base_url + '/home-loans/search?h_per_page=1000'
         response = requests.get(url)
         souped_response = BeautifulSoup(response.content, "html.parser")
