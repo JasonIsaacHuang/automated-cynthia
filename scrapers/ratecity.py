@@ -13,14 +13,18 @@ class RateCity(Scraper):
         response = requests.get(url)
         souped_response = BeautifulSoup(response.content, "html.parser")
 
-        providers_list = []
-        try:
-            for lender in souped_response.find(class_='lender').find_all('a'):
-                providers_list.append(lender.attrs['href'])
-        except Exception as e:
-            print("Could not fetch html for lender list")
+        lender_list = []
 
-        return providers_list
+        try:
+            for lender in souped_response.find_all('div', class_='company-item'):
+                try:
+                    lender_list.append(lender.parent.parent.attrs['href'])
+                except Exception as e:
+                    raise e
+        except Exception as e:
+            raise e
+
+        return lender_list
 
     def products(self):
         url = self.base_url + '/home-loans/search?h_per_page=1000'

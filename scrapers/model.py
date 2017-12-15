@@ -15,7 +15,7 @@ class Scraper(ABC):
 		if self.lender_list == [] or force_fetch == True:
 			lender_list = self._lenders()
 
-			if not lender_list == [] or not lender_list == None:
+			if not lender_list == [] and not lender_list == None:
 				self.lender_list = lender_list
 			
 		return self.lender_list
