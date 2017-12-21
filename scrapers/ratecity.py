@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 from .model import Scraper
-import csv
 import re
 import requests
+
 
 class RateCity(Scraper):
 
@@ -27,7 +27,7 @@ class RateCity(Scraper):
         return lender_list
 
     def _products(self):
-        url = self.base_url + '/home-loans/search?h_per_page=1000'
+        url = self.base_url + '/home-loans/search?h_per_page=1'
         response = requests.get(url)
         souped_response = BeautifulSoup(response.content, "html.parser")
 
@@ -35,7 +35,7 @@ class RateCity(Scraper):
         products_urls = []
 
         try:
-            # Collect a list of product urls first
+            # collect a list of product urls first
             result_set = souped_response.find(class_='hidden-xs-ratetable').find('tbody')
 
             for product in result_set.find_all('tr'):
@@ -45,10 +45,10 @@ class RateCity(Scraper):
             raise Exception('Parsing error in' + url)
 
         num_products = len(products_urls)
-        # Go to each individual page and fetch the data there
+        # go to each individual page and fetch the data there
         for idx, product in enumerate(products_urls):
             url = self.base_url + product
-            print("[" + str(idx+1).zfill(len(str(num_products))) + "/" + str(num_products) + "] Fetching " + url)
+            print("[" + str(idx + 1).zfill(len(str(num_products))) + "/" + str(num_products) + "] Fetching " + url)
             product = self.product(url)
             products_list.append(product)
 
@@ -68,7 +68,7 @@ class RateCity(Scraper):
         try:
             object['Lender'] = souped_response.find('ol', class_='breadcrumb').find('a', href=re.compile('/home-loans/.+')).find('span', property='name').text
         except Exception as e:
-            # Lender is required or else this product would be useless
+            # lender is required or else this product would be useless
             return {}
 
         try:
@@ -165,7 +165,7 @@ class RateCity(Scraper):
                 object['Repayment Frequency'] = 'N/A'
 
         except Exception as e:
-            # If it fails here, return what we have so that we at least know this product exists,
+            # if it fails here, return what we have so that we at least know this product exists
             pass
 
         return object

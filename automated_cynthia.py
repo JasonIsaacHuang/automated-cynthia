@@ -1,5 +1,5 @@
 from scrapers.ratecity import RateCity
-from pprint import pprint
+from scrapers.finder import Finder
 import argparse
 import sys
 
@@ -19,11 +19,16 @@ def main(argv):
                 print('Scraping from RateCity')
                 ratecity = RateCity()
                 ratecity.to_csv(ratecity.products(), 'ratecity.csv')
+            elif source.lower() == 'finder':
+                print('Scraping from Finder')
+                finder = Finder()
+                finder.to_csv(finder.products(), 'finder.csv')
             else:
                 print(source + ' not a valid source, skipping...')
 
     else:
         print("no source specified, scraping from all sources")
+
 
 if __name__ == "__main__":
     main(sys.argv)
