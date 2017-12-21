@@ -1,3 +1,5 @@
+from pprint import pprint
+
 
 class Log:
 
@@ -14,19 +16,19 @@ class Log:
 
     def i(self, str):
         if (self.verbosity >= 0):
-            print(str)
+            pprint(str)
 
     def v(self, str):
         if (self.verbosity >= 1):
-            print(str)
+            pprint(str)
 
     def d(self, str):
         if (self.verbosity >= 2):
-            print(str)
+            pprint(str)
 
     # disregards all verbosity levels and outputs anyways
     def e(self, str):
-        print(str)
+        pprint(str)
 
 
 def invert_dict(dict):

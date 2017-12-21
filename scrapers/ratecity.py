@@ -19,9 +19,9 @@ class RateCity(Scraper):
             for lender in souped_response.find_all('div', class_='company-item'):
                 try:
                     lender_list.append(lender.parent.parent.attrs['href'])
-                except Exception as e:
+                except Exception:
                     pass
-        except Exception as e:
+        except Exception:
             raise Exception('Parsing error in' + url)
 
         return lender_list

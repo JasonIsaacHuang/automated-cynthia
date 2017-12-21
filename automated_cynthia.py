@@ -5,9 +5,28 @@ import argparse
 import sys
 
 
+def scrape_ratecity(log, lender_mode=False):
+    log.i('Scraping from RateCity')
+    ratecity = RateCity(log)
+    if lender_mode:
+        log.i(ratecity.lenders())
+    else:
+        ratecity.to_csv(ratecity.products(), 'ratecity.csv')
+
+
+def scrape_finder(log, lender_mode=False):
+    log.i('Scraping from Finder')
+    finder = Finder(log)
+    if lender_mode:
+        log.i(finder.lenders())
+    else:
+        finder.to_csv(finder.products(), 'finder.csv')
+
+
 def main(argv):
     parser = argparse.ArgumentParser(description='Scrapes various websites for mortgages')
-    parser.add_argument('-s', '--source', help='choose which sources to scrape from', nargs='+')
+    parser.add_argument('-s', '--source', help='choose which sources to scrape from [finder | ratecity]', nargs='+')
+    parser.add_argument('-l', '--lender', help='output the lenders available instead of scraping', action='store_true')
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-q', '--quiet', action='store_true')
@@ -26,20 +45,22 @@ def main(argv):
         log.i('debug output enabled')
         log.verbosity = 2
 
+    lender_mode = False
+    if args.lender:
+        lender_mode = True
+
     if args.source:
         for source in set(args.source):
-            if source.lower() == 'ratecity':
-                log.i('Scraping from RateCity')
-                ratecity = RateCity(log)
-                ratecity.to_csv(ratecity.products(), 'ratecity.csv')
-            elif source.lower() == 'finder':
-                log.i('Scraping from Finder')
-                finder = Finder(log)
-                finder.to_csv(finder.products(), 'finder.csv')
+            if source.lower() == 'finder':
+                scrape_finder(log, lender_mode)
+            elif source.lower() == 'ratecity':
+                scrape_ratecity(log, lender_mode)
             else:
                 log.i(source + ' not a valid source, skipping...')
     else:
         log.i("no source specified, scraping from all sources")
+        scrape_finder(log, lender_mode)
+        scrape_ratecity(log, lender_mode)
 
 
 if __name__ == "__main__":

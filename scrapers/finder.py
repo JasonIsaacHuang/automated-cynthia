@@ -36,14 +36,14 @@ class Finder(Scraper):
                 if '/home-loans/' in lender.find('a').attrs['href']:
                     lender_name = lender.find('a').text.strip()
                     lender_url = lender.find('a').attrs['href']
-                    lender_tuple = (lender_name, lender_url)
 
                     if lender_name in accepted_lenders.keys():
+                        lender_tuple = (accepted_lenders[lender_name], lender_url)
                         lender_list.append(lender_tuple)
                     else:
                         self.log.v('skipping ' + lender_name)
         except Exception:
-            raise Exception('Parsing error in' + url)
+            raise Exception('Parsing error in ' + url)
 
         return lender_list
 
