@@ -1,0 +1,175 @@
+{
+	"lenders": {
+		"Adelaide Bank": [
+			"Adelaide Bank"
+		],
+		"Advantedge": [
+			"Advantedge"
+		],
+		"AMP": [
+			"AMP"
+		],
+		"ANZ": [
+			"ANZ"
+		],
+		"Australian Military Bank": [
+			"Australian Military Bank"
+		],
+		"Auswide Bank": [
+			"Auswide Bank"
+		],
+		"Bank Australia": [
+			"Bank Australia"
+		],
+		"Bank First": [
+			"Bank First"
+		],
+		"Bank of Melbourne": [
+			"Bank of Melbourne"
+		],
+		"Bank of Queensland": [
+			"Bank of Queensland"
+		],
+		"Bank of SA": [
+			"Bank of SA",
+			"BankSA"
+		],
+		"Bank of Sydney": [
+			"Bank of Sydney"
+		],
+		"Bankwest": [
+			"Bankwest"
+		],
+		"Beyond Bank Australia": [
+			"Beyond Bank Australia",
+			"Beyond Bank"
+		],
+		"Bluebay Home Loans": [
+			"Bluebay Home Loans"
+		],
+		"Bluestone": [
+			"Bluestone"
+		],
+		"Citibank": [
+			"Citibank"
+		],
+		"Commonwealth Bank of Australia": [
+			"Commonwealth Bank of Australia",
+			"Commonwealth Bank"
+		],
+		"Community Alliance Credit Union": [
+			"Community Alliance Credit Union"
+		],
+		"Credit Union Australia": [
+			"Credit Union Australia",
+			"CUA"
+		],
+		"Credit Union SA": [
+			"Credit Union SA"
+		],
+		"Firstmac": [
+			"Firstmac"
+		],
+		"Heritage Bank": [
+			"Heritage Bank"
+		],
+		"HomeStart Finance": [
+			"HomeStart Finance",
+			"HomeStart"
+		],
+		"HSBC": [
+			"HSBC"
+		],
+		"ING Direct": [
+			"ING Direct",
+			"ING"
+		],
+		"La Trobe Financial": [
+			"La Trobe Financial"
+		],
+		"Liberty Financial": [
+			"Liberty Financial"
+		],
+		"Loan Avenue": [
+			"Loan Avenue"
+		],
+		"Macquarie Bank": [
+			"Macquarie Bank",
+			"Macquarie"
+		],
+		"ME Bank": [
+			"ME Bank",
+			"ME"
+		],
+		"Mortgage Ezy": [
+			"Mortgage Ezy"
+		],
+		"MyState": [
+			"MyState"
+		],
+		"NAB": [
+			"NAB"
+		],
+		"Newcastle Permanent Building Society": [
+			"Newcastle Permanent Building Society"
+		],
+		"P&N Bank": [
+			"P&N Bank",
+			"P&N; Bank"
+		],
+		"Pepper Money": [
+			"Pepper Money"
+		],
+		"QBank": [
+			"QBank"
+		],
+		"QBE Insurance": [
+			"QBE Insurance"
+		],
+		"QLD Country Credit Union": [
+			"QLD Country Credit Union",
+			"Queensland Country Credit Union"
+		],
+		"Qudos Bank": [
+			"Qudos Bank"
+		],
+		"RAMS": [
+			"RAMS"
+		],
+		"Resi": [
+			"Resi"
+		],
+		"Resimac": [
+			"Resimac",
+			"RESIMAC"
+		],
+		"St George": [
+			"St George",
+			"St.George"
+		],
+		"Suncorp": [
+			"Suncorp",
+			"Suncorp Bank"
+		],
+		"Teacher Mutual Bank": [
+			"Teachers Mutual Bank"
+		],
+		"The Rock": [
+			"The Rock",
+			"The Rock Building Society"
+		],
+		"Virgin Money Australia": [
+			"Virgin Money Australia",
+			"Virgin Money"
+		],
+		"Vow Financial": [
+			"Vow Financial"
+		],
+		"Westpac": [
+			"Westpac"
+		],
+		"Yellow Brick Road": [
+			"Yellow Brick Road"
+		]
+	}
+}

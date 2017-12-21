@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
+from utils import invert_dict
 from .model import Scraper
+import json
 import re
 import requests
 
@@ -25,12 +27,21 @@ class Finder(Scraper):
         response = requests.get(url)
         souped_response = BeautifulSoup(response.content, 'html.parser')
 
+        accepted_lenders = invert_dict(json.load(open('config.json'))['lenders'])
+
         lender_list = []
 
         try:
             for lender in souped_response.find(class_='az-listing js-az-listing').find(class_='hide-desktop').find_all('li', class_='az-listing__item'):
                 if '/home-loans/' in lender.find('a').attrs['href']:
-                    lender_list.append((lender.find('a').text.strip(), lender.find('a').attrs['href']))
+                    lender_name = lender.find('a').text.strip()
+                    lender_url = lender.find('a').attrs['href']
+                    lender_tuple = (lender_name, lender_url)
+
+                    if lender_name in accepted_lenders.keys():
+                        lender_list.append(lender_tuple)
+                    else:
+                        self.log.v('skipping ' + lender_name)
         except Exception:
             raise Exception('Parsing error in' + url)
 

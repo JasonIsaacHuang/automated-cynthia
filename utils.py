@@ -27,3 +27,14 @@ class Log:
     # disregards all verbosity levels and outputs anyways
     def e(self, str):
         print(str)
+
+
+def invert_dict(dict):
+    invert = {}
+    for k, v in dict.items():
+        if isinstance(v, list):
+            for i in v:
+                invert[i] = k
+        else:
+            invert[v] = k
+    return invert
