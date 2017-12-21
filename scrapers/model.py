@@ -1,11 +1,16 @@
 from abc import ABC, abstractmethod, abstractproperty
+from utils import Log
 import csv
 
 
 class Scraper(ABC):
 
-    lender_list = []
-    product_list = []
+    def __init__(self, log=None):
+        if log is None:
+            log = Log()
+        self.log = log
+        self.lender_list = []
+        self.product_list = []
 
     @abstractproperty
     def base_url(self):
@@ -13,7 +18,7 @@ class Scraper(ABC):
 
     def lenders(self, force_fetch=False):
 
-        print("Fetching lenders from " + self.base_url)
+        self.log.i("Fetching lenders from " + self.base_url)
         if self.lender_list == [] or force_fetch:
             lender_list = self._lenders()
 
@@ -28,7 +33,7 @@ class Scraper(ABC):
 
     def products(self, force_fetch=False):
 
-        print("Fetching products from " + self.base_url)
+        self.log.i("Fetching products from " + self.base_url)
         if self.product_list == [] or force_fetch:
             product_list = self._products()
 
@@ -52,7 +57,7 @@ class Scraper(ABC):
         keys = set().union(*products)
 
         csv_writer = csv.DictWriter(file_handle, keys)
-        print("Writing to " + file_name)
+        self.log.i("Writing to " + file_name)
         csv_writer.writeheader()
         csv_writer.writerows(products)
 

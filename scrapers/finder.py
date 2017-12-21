@@ -10,7 +10,7 @@ class Finder(Scraper):
 
     def lenders(self, force_fetch=False):
 
-        print('Fetching lenders from ' + self.base_url)
+        self.log.i('Fetching lenders from ' + self.base_url)
         if self.lender_list == [] or force_fetch:
             lender_list = self._lenders()
 
@@ -47,9 +47,9 @@ class Finder(Scraper):
 
         num_lenders = len(lenders)
         # visit each lender as this will contain all the products available
-        for idx, (_, url) in enumerate(lenders[1:3]):
+        for idx, (_, url) in enumerate(lenders):
             lender_progress = '[' + str(idx + 1).zfill(len(str(num_lenders))) + '/' + str(num_lenders) + ']'
-            print(lender_progress + ' Fetching ' + url)
+            self.log.i(lender_progress + ' Fetching ' + url)
             response = requests.get(url)
             souped_response = BeautifulSoup(response.content, 'html.parser')
 
@@ -84,7 +84,7 @@ class Finder(Scraper):
             num_urls = len(urls)
             for idx, url in enumerate(urls):
                 lender_product_progress = len(lender_progress) * ' ' + ' [' + str(idx + 1).zfill(len(str(num_urls))) + '/' + str(num_urls) + ']'
-                print(lender_product_progress + ' Fetching ' + url)
+                self.log.v(lender_product_progress + ' Fetching ' + url)
 
                 # visit each product
                 products_list.extend(self.product(url, lender_product_progress))
@@ -110,7 +110,7 @@ class Finder(Scraper):
             num_variants = len(variant_urls)
             for idx, variant_url in enumerate(variant_urls):
                 lender_product_variant_progress = len(progress) * ' ' + ' [' + str(idx + 1).zfill(len(str(num_variants))) + '/' + str(num_variants) + ']'
-                print(lender_product_variant_progress + ' Fetching ' + variant_url)
+                self.log.d(lender_product_variant_progress + ' Fetching ' + variant_url)
 
                 # visit each variant
                 products_list.append(self.product_variant(variant_url))
