@@ -40,8 +40,9 @@ class Finder(Scraper):
                     if lender_name in accepted_lenders.keys():
                         lender_tuple = (accepted_lenders[lender_name], lender_url)
                         lender_list.append(lender_tuple)
+                        self.log.v(lender_name)
                     else:
-                        self.log.v('skipping ' + lender_name)
+                        self.log.v('skip - ' + lender_name)
         except Exception:
             raise Exception('Parsing error in ' + url)
 
@@ -136,7 +137,7 @@ class Finder(Scraper):
 
         object = {}
         # attach url for easy reference in the output
-        object['url'] = url
+        object['Url'] = url
 
         response = requests.get(url)
         souped_response = BeautifulSoup(response.content, 'html.parser')
@@ -151,29 +152,29 @@ class Finder(Scraper):
 
             try:
                 # interest_rate_index = details.find('table').find_all('tr')
-                object['Interest rate'] = details.find('table').find('th', text='Interest Rate Type').parent.find('td').text
+                object['Rate Type'] = details.find('table').find('th', text='Interest Rate Type').parent.find('td').text
             except Exception:
-                object['Interest rate'] = 'N/A'
+                object['Rate Type'] = 'N/A'
 
             try:
-                object['Minimum Loan Amount'] = details.find('table').find('th', text='Minimum Loan Amount').parent.find('td').text
+                object['Min Loan Amount'] = details.find('table').find('th', text='Minimum Loan Amount').parent.find('td').text
             except Exception:
-                object['Minimum Loan Amount'] = 'N/A'
+                object['Min Loan Amount'] = 'N/A'
 
             try:
-                object['Maximum Loan Amount'] = details.find('table').find('th', text='Maximum Loan Amount').parent.find('td').text
+                object['Max Loan Amount'] = details.find('table').find('th', text='Maximum Loan Amount').parent.find('td').text
             except Exception:
-                object['Maximum Loan Amount'] = 'N/A'
+                object['Max Loan Amount'] = 'N/A'
 
             try:
-                object['Minimum Loan Term'] = details.find('table').find('th', text='Minimum Loan Term').parent.find('td').text
+                object['Min Loan Term'] = details.find('table').find('th', text='Minimum Loan Term').parent.find('td').text
             except Exception:
-                object['Minimum Loan Term'] = 'N/A'
+                object['Min Loan Term'] = 'N/A'
 
             try:
-                object['Maximum Loan Term'] = details.find('table').find('th', text='Maximum Loan Term').parent.find('td').text
+                object['Max Loan Term'] = details.find('table').find('th', text='Maximum Loan Term').parent.find('td').text
             except Exception:
-                object['Maximum Loan Term'] = 'N/A'
+                object['Max Loan Term'] = 'N/A'
 
             try:
                 object['Mortgage Offset Account'] = details.find('table').find('th', text='Mortgage Offset Account').parent.find('td').text

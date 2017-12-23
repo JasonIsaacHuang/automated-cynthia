@@ -171,5 +171,50 @@
 		"Yellow Brick Road": [
 			"Yellow Brick Road"
 		]
-	}
+	},
+	"column_order": [
+		"Name",
+		"Variant",
+
+		"Comparison Rate",
+		"Interest Rate",
+
+		"Rate Type",
+
+		"Min Loan Amount",
+		"Max Loan Amount",
+
+		"Min LVR",
+		"Max LVR",
+
+		"Min Loan Term",
+		"Max Loan Term",
+
+		"Loan Purpose",
+		"Owner Occupied",
+		"Interest Only",
+
+		"Fixed Interest",
+
+		"Repayment Type",
+		"Principal & Interest",
+		"Interest Only",
+
+		"Repayment Frequency",
+		"Monthly Payment",
+		"Fortnightly Payment",
+		"Weekly Payment",
+
+		"Line of Credit",
+
+		"Mortgage Offset Account",
+
+		"Split Loan Facility",
+
+		"Loan Redraw Facility",
+
+		"Extra Repayments",
+
+		"Url"
+	]
 }

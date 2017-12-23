@@ -1,6 +1,3 @@
-from pprint import pprint
-
-
 class Log:
 
     '''
@@ -14,21 +11,28 @@ class Log:
     def __init__(self, verbosity=0):
         self.verbosity = verbosity
 
-    def i(self, str):
+    def _print(self, output):
+        if type(output) == list:
+            for item in output:
+                print(item)
+        else:
+            print(output)
+
+    def i(self, output):
         if (self.verbosity >= 0):
-            pprint(str)
+            self._print(output)
 
-    def v(self, str):
+    def v(self, output):
         if (self.verbosity >= 1):
-            pprint(str)
+            self._print(output)
 
-    def d(self, str):
+    def d(self, output):
         if (self.verbosity >= 2):
-            pprint(str)
+            self._print(output)
 
     # disregards all verbosity levels and outputs anyways
-    def e(self, str):
-        pprint(str)
+    def e(self, output):
+        self._print(output)
 
 
 def invert_dict(dict):
