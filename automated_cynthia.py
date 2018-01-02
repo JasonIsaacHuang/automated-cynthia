@@ -1,17 +1,9 @@
-from scrapers.ratecity import RateCity
 from scrapers.finder import Finder
+from scrapers.mozo import Mozo
+from scrapers.ratecity import RateCity
 from utils import Log
 import argparse
 import sys
-
-
-def scrape_ratecity(log, lender_mode=False):
-    log.i('Scraping from RateCity')
-    ratecity = RateCity(log)
-    if lender_mode:
-        log.i(ratecity.lenders())
-    else:
-        ratecity.to_csv(ratecity.products(), 'ratecity.csv')
 
 
 def scrape_finder(log, lender_mode=False):
@@ -21,6 +13,24 @@ def scrape_finder(log, lender_mode=False):
         log.i(finder.lenders())
     else:
         finder.to_csv(finder.products(), 'finder.csv')
+
+
+def scrape_mozo(log, lender_mode=False):
+    log.i('Scraping from Mozo')
+    mozo = Mozo(log)
+    if lender_mode:
+        log.i(mozo.lenders())
+    else:
+        mozo.to_csv(mozo.products(), 'mozo.csv')
+
+
+def scrape_ratecity(log, lender_mode=False):
+    log.i('Scraping from RateCity')
+    ratecity = RateCity(log)
+    if lender_mode:
+        log.i(ratecity.lenders())
+    else:
+        ratecity.to_csv(ratecity.products(), 'ratecity.csv')
 
 
 def main(argv):
@@ -53,6 +63,8 @@ def main(argv):
         for source in set(args.source):
             if source.lower() == 'finder':
                 scrape_finder(log, lender_mode)
+            elif source.lower() == 'mozo':
+                scrape_mozo(log, lender_mode)
             elif source.lower() == 'ratecity':
                 scrape_ratecity(log, lender_mode)
             else:
@@ -60,6 +72,7 @@ def main(argv):
     else:
         log.i("no source specified, scraping from all sources")
         scrape_finder(log, lender_mode)
+        scrape_mozo(log, lender_mode)
         scrape_ratecity(log, lender_mode)
 
 
