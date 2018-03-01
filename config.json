@@ -215,6 +215,13 @@
 
 		"Extra Repayments",
 
+		"Application Fee",
+		"Lender's Legal Fee",
+		"Valuation Fee",
+		"Ongoing Fees",
+		"Settlement Fee",
+		"Discharge Fee",
+
 		"Url"
 	]
 }

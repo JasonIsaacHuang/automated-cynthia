@@ -40,4 +40,16 @@ class Mozo(Scraper):
         return lender_list
 
     def _products(self):
-        pass
+        
+        product_list = []
+
+        # fetch all lenders
+        lenders = self.lender_list
+        if lenders == [] or lenders is None:
+            lenders = self._lenders()
+
+        num_lenders = len(lenders)
+        # visit each lender as this will contain all the products available
+        for idx, (_, url) in enumerate(lenders):
+            lender_progress = '[' + str(idx + 1).zfill(len(str(num_lenders))) + '/' + str(num_lenders) + ']'
+            print(url)
