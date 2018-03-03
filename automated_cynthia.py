@@ -1,6 +1,7 @@
-from scrapers.finder import Finder
-from scrapers.mozo import Mozo
-from scrapers.ratecity import RateCity
+from scrapers.finder_old import Finder
+from scrapers.mozo_old import Mozo
+from scrapers.ratecity_old import RateCity
+from source.Source import Source
 from utils import Log
 import argparse
 import sys
@@ -77,4 +78,9 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    # main(sys.argv)
+
+    s = Source('finder', 'mozo', 'ratecity')
+
+    print(s.sources())
+

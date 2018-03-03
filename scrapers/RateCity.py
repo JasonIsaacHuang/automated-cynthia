@@ -1,0 +1,2 @@
+class RateCity:
+    pass
