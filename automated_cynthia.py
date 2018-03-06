@@ -1,4 +1,5 @@
 import argparse
+from requests import ConnectionError
 import sys
 
 from source.Source import Source
@@ -85,16 +86,19 @@ def main(argv):
     if args.source:
         sources = args.source
 
-    source_object = Source(sources)
+    try:
+        source_object = Source(['finder'])
 
-    print("Configured with " + str(source_object.sources()))
+        print("Configured with " + str(source_object.sources()))
 
-    print("Finding all lenders\n")
+        print("Finding all lenders\n")
 
-    all_lenders = source_object.all_lenders()
-    for lender in all_lenders:
-        print(str(lender))
+        all_lenders = source_object.all_lenders()
+        for lender in all_lenders:
+            print(str(lender))
 
+    except ConnectionError:
+        print("There is something wrong with the internet connection.")
 
 if __name__ == "__main__":
     main(sys.argv)
