@@ -1,5 +1,4 @@
 import json
-from .Lender import Lender
 from scrapers.Finder import Finder
 from scrapers.Mozo import Mozo
 from scrapers.RateCity import RateCity
@@ -7,39 +6,70 @@ from scrapers.RateCity import RateCity
 class Source:
 
     # Construct with different source configurations
-    def __init__(self, *sources):
+    def __init__(self, sources = None):
 
-        self._source_config = json.load(open('source/source_config.json'))
         # Collection of valid sources
         self._sources = {}
+        self._config = json.load(open('config.json'))
+
+        # No sources specified, default to all sources
+        if sources == None:
+            sources = self._config['source']
 
         sources = [src.lower() for src in sources]
         for src in sources:
-            if src in self._source_config['source']:
+            if src in self._config['source']:
                 scraper = None
                 if src == 'finder':
                     scraper = Finder()
-                elif src == 'ratecity':
-                    scraper = RateCity()
                 elif src == 'mozo':
                     scraper = Mozo()
+                elif src == 'ratecity':
+                    scraper = RateCity()
                 self._sources[src] = scraper
 
-        self._lender_config = json.load(open('source/lender_config.json'))
-        # Collection of lenders available from the given sources
-        self._lenders = {}
+        self._lenders = None
 
-        for src in self._sources.values():
-            pass
-
-
-
+    """
+    Returns all enabled sources
+    
+    Returns:
+        A list of all enabled sources
+    """
     def sources(self):
         return list(self._sources.keys())
 
-    def url_of(self, source):
-        if source in self._sources.keys() and source in self._source_config.keys():
-            return self._source_config[source]
+    """
+    Establishes all the lenders that are available from each source
+    
+    Returns:
+        No return value
+    """
+    def _prepare_lenders(self):
 
-    def lender(self, lender):
-        return Lender(self, lender)
+        if self._lenders == None:
+            self._lenders = {}
+            for src in self._sources.values():
+                lenders = src.lenders()
+                for lender, lender_object in lenders.items():
+                    if lender not in self._lenders:
+                        self._lenders[lender] = [lender_object]
+                    else:
+                        self._lenders[lender].append(lender_object)
+
+    def lenders(self, lender):
+
+        self._prepare_lenders()
+
+        if lender in self._lenders.keys():
+            return self._lenders[lender]
+        else:
+            return []
+
+    def all_lenders(self):
+        self._prepare_lenders()
+
+        lenders = []
+        for lender in self._lenders.keys():
+            lenders.extend(self.lenders(lender))
+        return lenders
