@@ -47,6 +47,7 @@ class Product:
 
     def name(self):
         self._prepare_information()
+        return self._product_information['Name']
         
 
     def base_name(self):

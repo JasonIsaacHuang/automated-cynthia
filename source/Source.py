@@ -2,11 +2,14 @@ import json
 from scrapers.Finder import Finder
 from scrapers.Mozo import Mozo
 from scrapers.RateCity import RateCity
+from utils import Log
 
 class Source:
 
     # Construct with different source configurations
-    def __init__(self, sources = None):
+    def __init__(self, log, sources = None):
+
+        self.log = log
 
         # Collection of valid sources
         self._sources = {}
@@ -56,6 +59,10 @@ class Source:
                         self._lenders[lender] = [lender_object]
                     else:
                         self._lenders[lender].append(lender_object)
+
+                    self.log.i(lender_object)
+
+        return
 
     def lenders(self, lender):
 

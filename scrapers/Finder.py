@@ -150,55 +150,122 @@ class Finder(Scraper):
     def product_information(self, product_url):
 
         response = requests.get(product_url)
-        soup = BeautifulSoup(response, 'html.parser')
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         details = soup.find('div', class_=re.compile('defaultInfobox'))
 
         product_information = {}
 
-        product_information['Url'] = product_url
+        try:
+            product_information['Url'] = product_url
+        except Exception:
+            pass
 
-        product_information['Name'] = details.find('table').find('tr').find('th', text='Product Name').parent.find('td').text
+        try:
+            product_information['Name'] = details.find('table').find('tr').find('th', text='Product Name').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Rate Type'] = details.find('table').find('th', text='Interest Rate Type').parent.find('td').text
+        try:
+            product_information['Rate Type'] = details.find('table').find('th', text='Interest Rate Type').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Min Loan Amount'] = details.find('table').find('th', text='Minimum Loan Amount').parent.find('td').text
+        try:
+            product_information['Min Loan Amount'] = details.find('table').find('th', text='Minimum Loan Amount').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Max Loan Amount'] = details.find('table').find('th', text='Maximum Loan Amount').parent.find('td').text
+        try:
+            product_information['Max Loan Amount'] = details.find('table').find('th', text='Maximum Loan Amount').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Min Loan Term'] = details.find('table').find('th', text='Minimum Loan Term').parent.find('td').text
+        try:
+            product_information['Min Loan Term'] = details.find('table').find('th', text='Minimum Loan Term').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Max Loan Term'] = details.find('table').find('th', text='Maximum Loan Term').parent.find('td').text
+        try:
+            product_information['Max Loan Term'] = details.find('table').find('th', text='Maximum Loan Term').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Mortgage Offset Account'] = details.find('table').find('th', text='Mortgage Offset Account').parent.find('td').text
+        try:
+            product_information['Mortgage Offset Account'] = details.find('table').find('th', text='Mortgage Offset Account').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Loan Redraw Facility'] = details.find('table').find('th', text='Loan Redraw Facility').parent.find('td').text
+        try:
+            product_information['Loan Redraw Facility'] = details.find('table').find('th', text='Loan Redraw Facility').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Split Loan Facility'] = details.find('table').find('th', text='Split Loan Facility').parent.find('td').text
+        try:
+            product_information['Split Loan Facility'] = details.find('table').find('th', text='Split Loan Facility').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Fixed Interest Option'] = details.find('table').find('th', text='Fixed Interest Option').parent.find('td').text
+        try:
+            product_information['Fixed Interest Option'] = details.find('table').find('th', text='Fixed Interest Option').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Suitable for Investment'] = details.find('table').find('th', text='Suitable for Investment').parent.find('td').text
+        try:
+            product_information['Suitable for Investment'] = details.find('table').find('th', text='Suitable for Investment').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Extra Repayment'] = details.find('table').find('th', text='Extra Repayment').parent.find('td').text
+        try:
+            product_information['Extra Repayment'] = details.find('table').find('th', text='Extra Repayment').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Available as equity loan/line of credit'] = details.find('table').find('th', text='Available as equity loan/line of credit').parent.find('td').text
+        try:
+            product_information['Available as equity loan/line of credit'] = details.find('table').find('th', text='Available as equity loan/line of credit').parent.find('td').text
+        except Exception:
+            pass
 
-        product_information['Repayment Type'] = details.find('table').find('th', text='Repayment Type').parent.find('td').text
+        try:
+            product_information['Repayment Type'] = details.find('table').find('th', text='Repayment Type').parent.find('td').text
+        except Exception:
+            pass
 
         # variant specific details are not properly loaded upon page load, must collect from the variant table instead
-        variant_id = product_url.split('#')[1]
-        product_information['Variant'] = soup.find('div', class_=re.compile('productVariantTable')).find('tbody').find('tr', {'data-product-id': variant_id}).find('td', class_=re.compile('title')).text
+        try:
+            variant_id = product_url.split('#')[1]
+            try:
+                product_information['Variant'] = soup.find('div', class_=re.compile('productVariantTable')).find('tbody').find('tr', {'data-product-id': variant_id}).find('td', class_=re.compile('title')).text
+            except Exception:
+                pass
+            try:
+                product_information['Name'] = product_information['Name'] + ' ' + product_information['Variant']
+            except Exception:
+                pass
 
-        product_information['Interest Rate'] = soup.find('div', class_=re.compile('productVariantTable')).find('tbody').find('tr', {'data-product-id':variant_id}).find('td', class_=re.compile('interest-rate')).find('span').text
+            try:
+                product_information['Interest Rate'] = soup.find('div', class_=re.compile('productVariantTable')).find('tbody').find('tr', {'data-product-id':variant_id}).find('td', class_=re.compile('interest-rate')).find('span').text
+            except Exception:
+                pass
 
-        product_information['Comparison Rate'] = soup.find('div', class_=re.compile('productVariantTable')).find('tbody').find('tr', {'data-product-id':variant_id}).find('td', class_=re.compile('interest-rate')).find('div', class_='variant-comp-rate').find('span').text
+            try:
+                product_information['Comparison Rate'] = soup.find('div', class_=re.compile('productVariantTable')).find('tbody').find('tr', {'data-product-id':variant_id}).find('td', class_=re.compile('interest-rate')).find('div', class_='variant-comp-rate').find('span').text
+            except Exception:
+                pass
 
-        max_insured_lvr_index = soup.find('div', class_=re.compile('productVariantTable')).find('thead').find('tr').index(soup.find('div', class_=re.compile('productVariantTable')).find('thead').find('tr').find('th', text=re.compile('Max Insured LVR')))
-        product_information['Max Insured LVR'] = soup.find('div', class_=re.compile('productVariantTable')).find('tbody').find('tr', {'data-product-id':variant_id}).find_all('td')[max_insured_lvr_index].text
+            max_insured_lvr_index = soup.find('div', class_=re.compile('productVariantTable')).find('thead').find('tr').index(soup.find('div', class_=re.compile('productVariantTable')).find('thead').find('tr').find('th', text=re.compile('Max Insured LVR')))
+            try:
+                product_information['Max Insured LVR'] = soup.find('div', class_=re.compile('productVariantTable')).find('tbody').find('tr', {'data-product-id':variant_id}).find_all('td')[max_insured_lvr_index].text
+            except Exception:
+                pass
 
-        max_insured_lvr_index = soup.find('div', class_=re.compile('productVariantTable')).find('thead').find('tr').index(soup.find('div', class_=re.compile('productVariantTable')).find('thead').find('tr').find('th', text=re.compile('Max LVR')))
-        product_information['Max LVR'] = soup.find('div', class_=re.compile('productVariantTable')).find('tbody').find('tr', {'data-product-id':variant_id}).find_all('td')[max_insured_lvr_index].text
+            max_insured_lvr_index = soup.find('div', class_=re.compile('productVariantTable')).find('thead').find('tr').index(soup.find('div', class_=re.compile('productVariantTable')).find('thead').find('tr').find('th', text=re.compile('Max LVR')))
+            try:
+                product_information['Max LVR'] = soup.find('div', class_=re.compile('productVariantTable')).find('tbody').find('tr', {'data-product-id':variant_id}).find_all('td')[max_insured_lvr_index].text
+            except Exception:
+                pass
+        except Exception:
+            pass
 
         return product_information
 

@@ -1,6 +1,7 @@
 import argparse
 from requests import ConnectionError
 import sys
+import re
 
 from source.Source import Source
 from utils import Log
@@ -76,29 +77,73 @@ from utils import Log
 #         scrape_ratecity(log, lender_mode)
 
 def main(argv):
-    parser = argparse.ArgumentParser(description='Scrapes various websites for mortgages')
+    parser = argparse.ArgumentParser(description='Collects mortgage product data from various websites')
     parser.add_argument('-s', '--source', help='choose which sources to scrape from [finder | ratecity | mozo]', nargs='+')
     # parser.add_argument('-l', '--lender', help='output the lenders available instead of scraping', action='store_true')
 
     args = parser.parse_args()
+
+    log = Log()
+    log.verbosity = 1
 
     sources = None
     if args.source:
         sources = args.source
 
     try:
-        source_object = Source(['finder'])
+        source_object = Source(log, ['finder'])
 
-        print("Configured with " + str(source_object.sources()))
+        log.i("Configured with " + str(source_object.sources()))
 
-        print("Finding all lenders\n")
+        log.i("Finding all lenders\n")
 
         all_lenders = source_object.all_lenders()
         for lender in all_lenders:
-            print(str(lender))
+            if lender.name() == 'Bank of Melbourne':
+                products = lender.products()
+                for product in products.values():
+                    print(product.url())
+                    # print(product.name())
 
     except ConnectionError:
         print("There is something wrong with the internet connection.")
 
+def distill_name(str1):
+
+    lender = 'Adelaide Bank'
+
+    # toLower everything
+    str1 = str1.lower()
+    lender = lender.lower()
+
+    # Strip lender name if possible
+    str1 = str1.lstrip(lender).strip(' ')
+
+    # remove everything in parentheses
+    str1 = re.sub('\(.*\)', '', str1)
+
+    # Remove known filler words
+    filler_words = ["home loan", "loan", "the"]
+    for word in filler_words:
+        str1 = re.sub(word, '', str1)
+
+    # fix whitespace formatting
+    str1 = re.sub(' +', ' ', str1)
+
+    # strip starting and ending whitespaces
+    str1 = re.sub('^ +', '', str1)
+    str1 = re.sub(' +$', '', str1)
+
+    print('|' + str1 + '|')
+
 if __name__ == "__main__":
     main(sys.argv)
+
+
+    # lender = 'ING'
+    # string1 = 'Orange Advantage Home Loan'
+    # string2 = 'ING Orange Advantage Loan'
+    # str3 = 'Adelaide Bank SmartFix Home Loan - 2 Year Fixed Rate (Owner Occupier, P&I)'
+    # str4 = 'Adelaide Bank SmartFit Home Loan - LVR < 90% (Owner Occupier)'
+    #
+    # distill_name(str3)

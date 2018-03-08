@@ -17,7 +17,10 @@ class Lender:
         self._products = None
 
     def __str__(self):
-        return self._lender + ' at ' + str(self._source)
+        return self.name() + ' at ' + str(self._source)
+
+    def name(self):
+        return self._lender
 
     """
     Establishes all of the products available for a given lender from a given source
