@@ -47,7 +47,7 @@ class Product:
 
     def name(self):
         self._prepare_information()
-        return self._product_information['Name']
+        return self._product_information['name'] if 'name' in self._product_information else ''
         
 
     def base_name(self):
@@ -56,84 +56,105 @@ class Product:
 
     def comparison_rate(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def interest_rate(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def rate_type(self):
         self._prepare_information()
+        return self._product_information['Rate Type'] if 'Rate Type' in self._product_information else ''
         
 
     def minimum_loan_amount(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def maximum_loan_amount(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def minimum_LVR(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def maximum_LVR(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def loan_purpose(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def repayment_type(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def repayment_frequency(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def line_of_credit(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def mortgage_offset_account(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def split_loan_facility(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def loan_redraw_facility(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def extra_repayments(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def application_fee(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def lenders_legal_fee(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def valuation_fee(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def ongoing_fees(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def settlement_fee(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         
 
     def discharge_fee(self):
         self._prepare_information()
+        return self._product_information['Name'] if 'Name' in self._product_information else ''
         

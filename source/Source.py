@@ -60,8 +60,6 @@ class Source:
                     else:
                         self._lenders[lender].append(lender_object)
 
-                    self.log.i(lender_object)
-
         return
 
     def lenders(self, lender):

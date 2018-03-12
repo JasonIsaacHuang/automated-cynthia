@@ -91,7 +91,7 @@ def main(argv):
         sources = args.source
 
     try:
-        source_object = Source(log, ['finder'])
+        source_object = Source(log, ['finder', ''])
 
         log.i("Configured with " + str(source_object.sources()))
 
@@ -99,51 +99,15 @@ def main(argv):
 
         all_lenders = source_object.all_lenders()
         for lender in all_lenders:
-            if lender.name() == 'Bank of Melbourne':
+            if lender.name() == 'HSBC':
                 products = lender.products()
                 for product in products.values():
                     print(product.url())
-                    # print(product.name())
+                    print(product.name())
 
     except ConnectionError:
         print("There is something wrong with the internet connection.")
 
-def distill_name(str1):
-
-    lender = 'Adelaide Bank'
-
-    # toLower everything
-    str1 = str1.lower()
-    lender = lender.lower()
-
-    # Strip lender name if possible
-    str1 = str1.lstrip(lender).strip(' ')
-
-    # remove everything in parentheses
-    str1 = re.sub('\(.*\)', '', str1)
-
-    # Remove known filler words
-    filler_words = ["home loan", "loan", "the"]
-    for word in filler_words:
-        str1 = re.sub(word, '', str1)
-
-    # fix whitespace formatting
-    str1 = re.sub(' +', ' ', str1)
-
-    # strip starting and ending whitespaces
-    str1 = re.sub('^ +', '', str1)
-    str1 = re.sub(' +$', '', str1)
-
-    print('|' + str1 + '|')
 
 if __name__ == "__main__":
     main(sys.argv)
-
-
-    # lender = 'ING'
-    # string1 = 'Orange Advantage Home Loan'
-    # string2 = 'ING Orange Advantage Loan'
-    # str3 = 'Adelaide Bank SmartFix Home Loan - 2 Year Fixed Rate (Owner Occupier, P&I)'
-    # str4 = 'Adelaide Bank SmartFit Home Loan - LVR < 90% (Owner Occupier)'
-    #
-    # distill_name(str3)
