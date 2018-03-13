@@ -98,10 +98,11 @@ def main(argv):
         log.i("Finding all lenders\n")
 
         all_lenders = source_object.all_lenders()
+
         for lender in all_lenders:
-            if lender.name() == 'HSBC':
-                products = lender.products()
-                for product in products.values():
+            products = lender.products()
+            for product in products.values():
+                if product.is_valid():
                     print(product.url())
                     print(product.name())
 
