@@ -4,7 +4,7 @@ import sys
 import re
 
 from models.Source import Source
-from utils import Log
+from Log import Log
 #
 #
 # def scrape_finder(log, lender_mode=False):

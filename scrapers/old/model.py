@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod, abstractproperty
-from utils import Log
+from Log import Log
 import csv
 import json
 

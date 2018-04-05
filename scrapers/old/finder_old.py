@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from utils import invert_dict
+from Log import invert_dict
 from .model import Scraper
 import json
 import re

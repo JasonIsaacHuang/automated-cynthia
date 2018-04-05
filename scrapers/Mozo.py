@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from .Scraper import Scraper
-from utils import invert_dict
+from Log import invert_dict
 from models.Lender import Lender
 import json
 import requests

@@ -2,7 +2,7 @@ import json
 from scrapers.Finder import Finder
 from scrapers.Mozo import Mozo
 from scrapers.RateCity import RateCity
-from utils import Log
+from Log import Log
 
 class Source:
 
