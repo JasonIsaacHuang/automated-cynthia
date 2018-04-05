@@ -3,7 +3,7 @@ from requests import ConnectionError
 import sys
 import re
 
-from source.Source import Source
+from models.Source import Source
 from utils import Log
 #
 #
@@ -36,7 +36,7 @@ from utils import Log
 #
 # def main(argv):
 #     parser = argparse.ArgumentParser(description='Scrapes various websites for mortgages')
-#     parser.add_argument('-s', '--source', help='choose which sources to scrape from [finder | ratecity]', nargs='+')
+#     parser.add_argument('-s', '--models', help='choose which sources to scrape from [finder | ratecity]', nargs='+')
 #     parser.add_argument('-l', '--lender', help='output the lenders available instead of scraping', action='store_true')
 #
 #     group = parser.add_mutually_exclusive_group()
@@ -60,25 +60,25 @@ from utils import Log
 #     if args.lender:
 #         lender_mode = True
 #
-#     if args.source:
-#         for source in set(args.source):
-#             if source.lower() == 'finder':
+#     if args.models:
+#         for models in set(args.models):
+#             if models.lower() == 'finder':
 #                 scrape_finder(log, lender_mode)
-#             elif source.lower() == 'mozo':
+#             elif models.lower() == 'mozo':
 #                 scrape_mozo(log, lender_mode)
-#             elif source.lower() == 'ratecity':
+#             elif models.lower() == 'ratecity':
 #                 scrape_ratecity(log, lender_mode)
 #             else:
-#                 log.i(source + ' not a valid source, skipping...')
+#                 log.i(models + ' not a valid models, skipping...')
 #     else:
-#         log.i("no source specified, scraping from all sources")
+#         log.i("no models specified, scraping from all sources")
 #         scrape_finder(log, lender_mode)
 #         scrape_mozo(log, lender_mode)
 #         scrape_ratecity(log, lender_mode)
 
 def main(argv):
     parser = argparse.ArgumentParser(description='Collects mortgage product data from various websites')
-    parser.add_argument('-s', '--source', help='choose which sources to scrape from [finder | ratecity | mozo]', nargs='+')
+    parser.add_argument('-s', '--models', help='choose which sources to scrape from [finder | ratecity | mozo]', nargs='+')
     # parser.add_argument('-l', '--lender', help='output the lenders available instead of scraping', action='store_true')
 
     args = parser.parse_args()

@@ -6,7 +6,7 @@ from utils import Log
 
 class Source:
 
-    # Construct with different source configurations
+    # Construct with different models configurations
     def __init__(self, log=None, sources=None):
         # If no log is passed, then no logs should be outputted
         # Using Log with silent mode does the same thing
@@ -21,11 +21,11 @@ class Source:
 
         # No sources specified, default to all sources
         if sources == None:
-            sources = self._config['source']
+            sources = self._config['models']
 
         sources = [src.lower() for src in sources]
         for src in sources:
-            if src in self._config['source']:
+            if src in self._config['models']:
                 scraper = None
                 if src == 'finder':
                     scraper = Finder()
@@ -47,7 +47,7 @@ class Source:
         return list(self._sources.keys())
 
     """
-    Establishes all the lenders that are available from each source
+    Establishes all the lenders that are available from each models
     
     Returns:
         No return value

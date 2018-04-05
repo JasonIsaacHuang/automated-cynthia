@@ -3,12 +3,12 @@ class Lender:
 
     """
     Constructor for Lender Object.
-    Holds all the data needed to be able to collect product data from a single source
+    Holds all the data needed to be able to collect product data from a single models
 
     Args:
-        source: An object handle for a particular source
-        lender: The name of a lender available from the given source
-        lender_url: The url that will contain product information from a given source
+        source: An object handle for a particular models
+        lender: The name of a lender available from the given models
+        lender_url: The url that will contain product information from a given models
     """
     def __init__(self, source, lender, lender_url):
         self._source = source
@@ -23,7 +23,7 @@ class Lender:
         return self._lender
 
     """
-    Establishes all of the products available for a given lender from a given source
+    Establishes all of the products available for a given lender from a given models
     
     Returns:
         No return value
@@ -34,7 +34,7 @@ class Lender:
             self._products = self._source.products(self._lender_url)
 
     """
-    Returns all products offered by the given lender from a given source
+    Returns all products offered by the given lender from a given models
     
     Returns:
         A dictionary of products to urls of the offered products

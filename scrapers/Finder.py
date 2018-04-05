@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 from .Scraper import Scraper
 from utils import invert_dict
-from source.Lender import Lender
-from source.Product import Product
+from models.Lender import Lender
+from models.Product import Product
 import json
 import re
 import requests
@@ -75,7 +75,7 @@ class Finder(Scraper):
         # find all product ranges
         for product in soup.find_all('a', class_='enquire-link-arrow'):
             # check that it is not a dud page
-            # check that the url does not direct outside of the source
+            # check that the url does not direct outside of the models
             if product not in self.dud_pages and self.valid_url(product):
                 product_name = product.parent.find('h4').text
                 product_url = product.attrs['href']
@@ -90,7 +90,7 @@ class Finder(Scraper):
                 product_name = product.find('a').text.split(' - ')[0]
                 product_url = product.find('a').attrs['href'].split('?')[0]
                 # check that it is not a dud page
-                # check that the url does not direct outside of the source
+                # check that the url does not direct outside of the models
                 # check if this url is not already captured
                 if (product_url not in self.dud_pages and self.valid_url(product_url) and product_url not in product_group_dict.values()):
                     product_group_dict[product_name] = product_url

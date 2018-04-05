@@ -13,7 +13,7 @@ class Product:
 		if self._product_information is None:
 			self.fetch()
 		if self._product_information is not None and key in self._product_information:
-			return self._product_information[key]
+			return self._product_information.get(key)
 		else:
 			return None
 
@@ -113,6 +113,7 @@ class Product:
 			return self.get("Principal and Interest")
 		else:
 			repayment_type = self.get("Repayment Type")
+			repayment_type = repayment_type.replace("&", "and")
 			if repayment_type is not None:
 				return "principal and interest" in repayment_type.lower()
 			else:

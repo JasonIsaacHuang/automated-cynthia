@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from .Scraper import Scraper
 from utils import invert_dict
-from source.Lender import Lender
+from models.Lender import Lender
 import json
 import requests
 
