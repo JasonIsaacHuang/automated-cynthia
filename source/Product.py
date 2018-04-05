@@ -1,170 +1,183 @@
 class Product:
 
-    def __init__(self, source, product_url, base_product_name=None):
-        self._source = source
-        self._product_url = product_url
-        self._base_product_name = base_product_name
-        self._product_information = None
+	def __init__(self, scraper, url, base_product_name=None):
+		self._scraper = scraper
+		self._url = url
+		self._base_product_name = base_product_name
+		self._product_information = None
 
-    def as_dictionary(self):
-        product = {}
+	def fetch(self):
+		self._product_information = self._scraper.product_information(self._url)
 
-        product['Source'] = self._source.name()
-        product['Url'] = self.url()
-        product['Name'] = self.name()
-        product['Base Name'] = self.base_name()
-        product['Comparison Rate'] = self.comparison_rate()
-        product['Interest Rate'] = self.interest_rate()
-        product['Rate Type'] = self.rate_type()
-        product['Minimum Loan Amount'] = self.minimum_loan_amount()
-        product['Maximum Loan Amount'] = self.maximum_loan_amount()
-        product['Minimum LVR'] = self.minimum_LVR()
-        product['Maximum LVR'] = self.maximum_LVR()
-        product['Loan Purpose'] = self.loan_purpose()
-        product['Repayment Type'] = self.repayment_type()
-        product['Repayment Frequency'] = self.repayment_frequency()
-        product['Line of Credit'] = self.line_of_credit()
-        product['Mortgage Offset Account'] = self.mortgage_offset_account()
-        product['Split Loan Facility'] = self.split_loan_facility()
-        product['Loan Redraw Facility'] = self.loan_redraw_facility()
-        product['Extra Repayments'] = self.extra_repayments()
-        product['Application Fee'] = self.application_fee()
-        product['Lenders Legal Fee'] = self.lenders_legal_fee()
-        product['Valuation Fee'] = self.valuation_fee()
-        product['Ongoing Fees'] = self.ongoing_fees()
-        product['Settlement Fees'] = self.settlement_fees()
-        product['Discharge Fees'] = self.discharge_fees()
+	def get(self, key):
+		if self._product_information is None:
+			self.fetch()
+		if self._product_information is not None and key in self._product_information:
+			return self._product_information[key]
+		else:
+			return None
 
-        return product
+	def to_dict(self):
+		return {
+			'Source':                   self._scraper.name,
+			'Url':                      self._url,
+			'Base Name':                self._base_product_name,
+			'Name':                     self.name(),
+			'Interest Rate':            self.interest_rate(),
+			'Fixed Rate':               self.fixed_rate_type(),
+			'Variable Rate':            self.variable_rate_type(),
+			'Minimum Loan Amount':      self.minimum_loan_amount(),
+	        'Maximum Loan Amount':      self.maximum_loan_amount(),
+			'Minimum LVR':              self.minimum_lvr(),
+			'Maximum LVR':              self.maximum_lvr(),
+			'Owner Occupied':           self.owner_occupied(),
+			'investment':               self.investment(),
+			'Principal and Interest':   self.principal_and_interest(),
+			'Interest Only':            self.interest_only(),
+			'Weekly Repayments':        self.repayment_frequency_weekly(),
+			'Fortnightly Repayments':   self.repayment_frequency_fortnightly(),
+			'Monthly Repayments':       self.repayment_frequency_monthly(),
+			'Line of Credit':           self.line_of_credit(),
+			'Mortgage Offset Account':  self.mortgage_offset_account(),
+			'Split Loan Facility':      self.split_loan_facility(),
+			'Loan Redraw Facility':     self.loan_redraw_facility(),
+			'Extra Repayments':         self.extra_repayment(),
+			'Application Fee':          self.application_fees(),
+			'Lenders Legal Fee':        self.legal_fees(),
+			'Valuation Fee':            self.valuation_fees(),
+			'Ongoing Fees':             self.ongoing_fees(),
+			'Settlement Fees':          self.settlement_fees(),
+			'Discharge Fees':           self.discharge_fees()
+		}
 
-    def is_valid(self):
-        return self._source.is_valid_page(self._product_url)
+	def name(self):
+		return self.get("Name")
 
-    def _prepare_information(self):
-        if self._product_information == None:
-            self._product_information = self._source.product_information(self._product_url)
+	def interest_rate(self):
+		return self.get("Interest Rate")
 
-    def _get(self, key):
-        if key in self._product_information:
-            return self._product_information[key]
-        else:
-            return ''
+	def fixed_rate_type(self):
+		if self.get("Fixed Rate") is not None:
+			return self.get("Fixed Rate")
+		else:
+			rate_type = self.get("Rate Type")
+			if rate_type is not None:
+				return "fixed" in rate_type.lower()
+			else:
+				return None
 
-    def url(self):
-        return self._product_url
+	def variable_rate_type(self):
+		if self.get("Variable Rate") is not None:
+			return self.get("Variable Rate")
+		else:
+			rate_type = self.get("Rate Type")
+			if rate_type is not None:
+				return "variable" in rate_type.lower()
+			else:
+				return None
 
+	def minimum_loan_amount(self):
+		return self.get("Minimum Loan Amount")
 
-    def name(self):
-        self._prepare_information()
-        return self._get('Name')
-        
+	def maximum_loan_amount(self):
+		return self.get("Maximum Loan Amount")
 
-    def base_name(self):
-        return self._base_product_name
-        
+	def minimum_lvr(self):
+		return self.get("Minimum LVR")
 
-    def comparison_rate(self):
-        self._prepare_information()
-        return self._get('Comparison Rate')
+	def maximum_lvr(self):
+		return self.get("Maximum LVR")
 
-        
+	def owner_occupied(self):
+		if self.get("Owner Occupied") is not None:
+			return self.get("Owner Occupied")
+		else:
+			loan_purpose = self.get("Loan Purpose")
+			if loan_purpose is not None:
+				return "owner occupied" in loan_purpose.lower()
+			else:
+				return None
 
-    def interest_rate(self):
-        self._prepare_information()
-        return self._get('Interest Rate')
-        
+	def investment(self):
+		if self.get("investment") is not None:
+			return self.get("investment")
+		else:
+			loan_purpose = self.get("Loan Purpose")
+			if loan_purpose is not None:
+				return "investment" in loan_purpose.lower()
+			else:
+				return None
 
-    def rate_type(self):
-        self._prepare_information()
-        return self._get('Rate Type')
-        
+	def principal_and_interest(self):
+		if self.get("Principal and Interest") is not None:
+			return self.get("Principal and Interest")
+		else:
+			repayment_type = self.get("Repayment Type")
+			if repayment_type is not None:
+				return "principal and interest" in repayment_type.lower()
+			else:
+				return None
 
-    def minimum_loan_amount(self):
-        self._prepare_information()
-        return self._get('Minimum Loan Amount')
-        
+	def interest_only(self):
+		if self.get("Interest Only") is not None:
+			return self.get("Interest Only")
+		else:
+			repayment_type = self.get("Repayment Type")
+			if repayment_type is not None:
+				return "interest only" in repayment_type.lower()
+			else:
+				return None
 
-    def maximum_loan_amount(self):
-        self._prepare_information()
-        return self._get('Maximum Loan Amount')
-        
+	def repayment_frequency_weekly(self):
+		repayment_frequency = self.get("Repayment Frequency")
+		if repayment_frequency is not None:
+			return "weekly" in repayment_frequency.lower()
+		else:
+			return None
 
-    def minimum_LVR(self):
-        self._prepare_information()
-        return self._get('Minimum LVR')
-        
+	def repayment_frequency_fortnightly(self):
+		repayment_frequency = self.get("Repayment Frequency")
+		if repayment_frequency is not None:
+			return "fortnightly" in repayment_frequency.lower()
+		else:
+			return None
 
-    def maximum_LVR(self):
-        self._prepare_information()
-        return self._get('Maximum LVR')
-        
+	def repayment_frequency_monthly(self):
+		repayment_frequency = self.get("Repayment Frequency")
+		if repayment_frequency is not None:
+			return "monthly" in repayment_frequency.lower()
+		else:
+			return None
 
-    def loan_purpose(self):
-        self._prepare_information()
-        return self._get('Loan Purpose')
-        
+	def line_of_credit(self):
+		return self.get("Line of Credit")
 
-    def repayment_type(self):
-        self._prepare_information()
-        return self._get('Repayment Type')
-        
+	def mortgage_offset_account(self):
+		return self.get("Mortgage Offset Account")
 
-    def repayment_frequency(self):
-        self._prepare_information()
-        return self._get('Repayment Frequency')
-        
+	def split_loan_facility(self):
+		return self.get("Split Loan Facility")
 
-    def line_of_credit(self):
-        self._prepare_information()
-        return self._get('Line of Credit')
-        
+	def loan_redraw_facility(self):
+		return self.get("Loan Redraw Facility")
 
-    def mortgage_offset_account(self):
-        self._prepare_information()
-        return self._get('Mortgage Offset Account')
-        
+	def extra_repayment(self):
+		return self.get("Extra Repayments")
 
-    def split_loan_facility(self):
-        self._prepare_information()
-        return self._get('Split Loan Facility')
-        
+	def application_fees(self):
+		return self.get("Application Fees")
 
-    def loan_redraw_facility(self):
-        self._prepare_information()
-        return self._get('Loan Redraw Facility')
-        
+	def legal_fees(self):
+		return self.get("Legal Fees")
 
-    def extra_repayments(self):
-        self._prepare_information()
-        return self._get('Extra Repayments')
-        
+	def valuation_fees(self):
+		return self.get("Valuation Fees")
 
-    def application_fee(self):
-        self._prepare_information()
-        return self._get('Application Fee')
-        
+	def ongoing_fees(self):
+		return self.get("Ongoing Fees")
 
-    def lenders_legal_fee(self):
-        self._prepare_information()
-        return self._get('Lenders Legal Fee')
-        
+	def settlement_fees(self):
+		return self.get("Settlement Fees")
 
-    def valuation_fee(self):
-        self._prepare_information()
-        return self._get('Valuation Fee')
-        
-
-    def ongoing_fees(self):
-        self._prepare_information()
-        return self._get('Ongoing Fees')
-        
-
-    def settlement_fees(self):
-        self._prepare_information()
-        return self._get('Settlement Fees')
-        
-
-    def discharge_fees(self):
-        self._prepare_information()
-        return self._get('Discharge Fees')
-        
+	def discharge_fees(self):
+		return self.get("Discharge Fees")
