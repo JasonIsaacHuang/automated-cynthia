@@ -7,9 +7,13 @@ from utils import Log
 class Source:
 
     # Construct with different source configurations
-    def __init__(self, log, sources = None):
-
-        self.log = log
+    def __init__(self, log=None, sources=None):
+        # If no log is passed, then no logs should be outputted
+        # Using Log with silent mode does the same thing
+        if log is None:
+            self.log = Log(verbosity=-1)
+        else:
+            self.log = log
 
         # Collection of valid sources
         self._sources = {}
