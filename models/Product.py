@@ -1,3 +1,8 @@
+import re
+
+from utils import parse_percent_string, parse_currency, parse_yesno
+
+
 class Product:
 
 	def __init__(self, scraper, url, base_product_name=None):
@@ -54,7 +59,10 @@ class Product:
 		return self.get("Name")
 
 	def interest_rate(self):
-		return self.get("Interest Rate")
+		interest_rate = self.get("Interest Rate")
+		interest_rate = re.sub(r'[A-Za-z ]', '', interest_rate)
+		interest_rate = parse_percent_string(interest_rate)
+		return interest_rate
 
 	def fixed_rate_type(self):
 		if self.get("Fixed Rate") is not None:
@@ -77,16 +85,24 @@ class Product:
 				return None
 
 	def minimum_loan_amount(self):
-		return self.get("Minimum Loan Amount")
+		minimum_loan_amount = self.get("Minimum Loan Amount")
+		minimum_loan_amount = parse_currency(minimum_loan_amount)
+		return minimum_loan_amount
 
 	def maximum_loan_amount(self):
-		return self.get("Maximum Loan Amount")
+		maximum_loan_amount = self.get("Maximum Loan Amount")
+		maximum_loan_amount = parse_currency(maximum_loan_amount)
+		return maximum_loan_amount
 
 	def minimum_lvr(self):
-		return self.get("Minimum LVR")
+		minimum_lvr = self.get("Minimum LVR")
+		minimum_lvr = parse_percent_string(minimum_lvr)
+		return minimum_lvr
 
 	def maximum_lvr(self):
-		return self.get("Maximum LVR")
+		maximum_lvr = self.get("Maximum LVR")
+		maximum_lvr = parse_percent_string(maximum_lvr)
+		return maximum_lvr
 
 	def owner_occupied(self):
 		if self.get("Owner Occupied") is not None:
@@ -151,34 +167,48 @@ class Product:
 			return None
 
 	def line_of_credit(self):
-		return self.get("Line of Credit")
+		return parse_yesno(self.get("Line of Credit"))
 
 	def mortgage_offset_account(self):
-		return self.get("Mortgage Offset Account")
+		return parse_yesno(self.get("Mortgage Offset Account"))
 
 	def split_loan_facility(self):
-		return self.get("Split Loan Facility")
+		return parse_yesno(self.get("Split Loan Facility"))
 
 	def loan_redraw_facility(self):
-		return self.get("Loan Redraw Facility")
+		return parse_yesno(self.get("Loan Redraw Facility"))
 
 	def extra_repayment(self):
-		return self.get("Extra Repayments")
+		extra_repayment = self.get("Extra Repayments")
+		extra_repayment = parse_currency(extra_repayment)
+		return extra_repayment
 
 	def application_fees(self):
-		return self.get("Application Fees")
+		application_fees = self.get("Application Fees")
+		application_fees = parse_currency(application_fees)
+		return application_fees
 
 	def legal_fees(self):
-		return self.get("Legal Fees")
+		legal_fees = self.get("Legal Fees")
+		legal_fees = parse_currency(legal_fees)
+		return legal_fees
 
 	def valuation_fees(self):
-		return self.get("Valuation Fees")
+		valuation_fees = self.get("Valuation Fees")
+		valuation_fees = parse_currency(valuation_fees)
+		return valuation_fees
 
 	def ongoing_fees(self):
-		return self.get("Ongoing Fees")
+		ongoing_fees = self.get("Ongoing Fees")
+		ongoing_fees = parse_currency(ongoing_fees)
+		return ongoing_fees
 
 	def settlement_fees(self):
-		return self.get("Settlement Fees")
+		settlement_fees = self.get("Settlement Fees")
+		settlement_fees = parse_currency(settlement_fees)
+		return settlement_fees
 
 	def discharge_fees(self):
-		return self.get("Discharge Fees")
+		discharge_fees = self.get("Discharge Fees")
+		discharge_fees = parse_currency(discharge_fees)
+		return discharge_fees
