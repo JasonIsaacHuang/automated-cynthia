@@ -25,7 +25,7 @@ class Source:
 
         sources = [src.lower() for src in sources]
         for src in sources:
-            if src in self._config['models']:
+            if src in self._config['source']:
                 scraper = None
                 if src == 'finder':
                     scraper = Finder()

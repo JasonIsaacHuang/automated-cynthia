@@ -78,7 +78,7 @@ from Log import Log
 
 def main(argv):
     parser = argparse.ArgumentParser(description='Collects mortgage product data from various websites')
-    parser.add_argument('-s', '--models', help='choose which sources to scrape from [finder | ratecity | mozo]', nargs='+')
+    parser.add_argument('-s', '--source', help='choose which sources to scrape from [finder | ratecity | mozo]', nargs='+')
     # parser.add_argument('-l', '--lender', help='output the lenders available instead of scraping', action='store_true')
 
     args = parser.parse_args()
