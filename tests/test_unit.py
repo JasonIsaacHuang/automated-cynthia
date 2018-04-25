@@ -1,11 +1,20 @@
 import pytest
 
-from scrapers.Finder import Finder
-from models.Product import Product
+def mock_request(test_source):
+	source_file_path = ''
+	if test_source == 'A':
+		source_file_path = 'tests/data/data_a.html'
+	elif test_source == 'B':
+		pass
+	else:
+		pass
+
+	if source_file_path != '':
+		file = open(source_file_path,'r')
+		return file.read()
+	else:
+		return ''
 
 
 def test_to_dict():
-	product_url = 'https://www.finder.com.au/adelaide-bank-smartsaver-home-loan#22835'
-	finder = Finder()
-	product = Product(finder, product_url, None)
-	# pprint.pprint(product.to_dict())
+	pass
