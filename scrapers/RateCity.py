@@ -225,3 +225,6 @@ class RateCity(Scraper):
             pass
 
         return product_information
+
+    def valid_url(self, url):
+        return self.base_url in url
