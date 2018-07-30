@@ -58,6 +58,9 @@ class Product:
 	def name(self):
 		return self.get("Name")
 
+	def url(self):
+		return self.get("Url")
+
 	def interest_rate(self):
 		interest_rate = self.get("Interest Rate")
 		interest_rate = re.sub(r'[A-Za-z ]', '', interest_rate)

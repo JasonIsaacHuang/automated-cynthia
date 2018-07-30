@@ -102,9 +102,8 @@ def main(argv):
         for lender in all_lenders:
             products = lender.products()
             for product in products.values():
-                if product.is_valid():
-                    print(product.url())
-                    print(product.name())
+                print(product.url())
+                print(product.name())
 
     except ConnectionError:
         print("There is something wrong with the internet connection.")
